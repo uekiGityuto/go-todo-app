@@ -9,6 +9,8 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -19,6 +21,9 @@ func main() {
 }
 
 func run(ctx context.Context) error {
+	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
 	cfg, err := config.New()
 	if err != nil {
 		return err
@@ -29,6 +34,7 @@ func run(ctx context.Context) error {
 	}
 	url := fmt.Sprintf("http://%s", l.Addr().String())
 	log.Printf("start with: %v", url)
+
 	s := &http.Server{
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
@@ -44,8 +50,7 @@ func run(ctx context.Context) error {
 		return nil
 	})
 
-	// キャンセルされるまでここでブロックされ、cancelされたらWebサーバをGraceful Shutdownする
-	// （ただ、キャンセルするような処理を実装していないので、テスト以外では以下は実行されない）
+	// SIGINT or SIGTERM を受信するまでここでブロック
 	<-ctx.Done()
 	if err := s.Shutdown(context.Background()); err != nil {
 		log.Printf("failed to shutdown: %+v", err)

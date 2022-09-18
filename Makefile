@@ -3,7 +3,7 @@
 
 DOCKER_TAG := latest
 build: ## Build docker image to deploy
-	docker build -t tie304628/gotodo:${DOCKER_TAG} --target-deploy ./
+	docker build -t tie304628/gotodo:${DOCKER_TAG} --target=deploy ./
 
 build-local: ## Build docker image to local development
 	docker compose build --no-cache
