@@ -52,6 +52,7 @@ func run(ctx context.Context) error {
 
 	// SIGINT or SIGTERM を受信するまでここでブロック
 	<-ctx.Done()
+	// Graceful Shutdownする
 	if err := s.Shutdown(context.Background()); err != nil {
 		log.Printf("failed to shutdown: %+v", err)
 	}
