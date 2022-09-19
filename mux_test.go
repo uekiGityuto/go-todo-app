@@ -10,7 +10,7 @@ import (
 func TestNewMux(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodGet, "/health", nil)
-	sut := NewMux()
+	sut := NewMux() // sutはSystems under Test (テスト対象物) の略
 	sut.ServeHTTP(w, r)
 	resp := w.Result()
 	t.Cleanup(func() {
