@@ -16,7 +16,7 @@ func New(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
 	// "parseTime=true"はtime.Time型のフィールドに正しい時刻情報を取得するために必要
 	db, err := sql.Open("mysql",
 		fmt.Sprintf(
-			"%s:%s@tcp(%s:%d)%s?parseTime=true",
+			"%s:%s@tcp(%s:%d)/%s?parseTime=true",
 			cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName,
 		),
 	)
