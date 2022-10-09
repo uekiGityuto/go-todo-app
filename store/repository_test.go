@@ -26,6 +26,7 @@ func TestNew(t *testing.T) {
 		correctCfg.DBPort = 3306 // CIで実行する場合はCIで実行するようのポート番号に上書きする
 	}
 
+	// DB接続に失敗するようなconfigを設定する。
 	incorrectCfg, err := config.New()
 	if err != nil {
 		t.Fatalf("cannot create config: %v", err)
