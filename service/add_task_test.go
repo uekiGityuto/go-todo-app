@@ -60,7 +60,7 @@ func TestAddTask(t *testing.T) {
 			t.Parallel()
 
 			sut := &AddTask{
-				DB:   nil,
+				DB:   nil, // Repoの中でしか利用しないがRepoはmockにするのでnilで良い
 				Repo: tt.moq,
 			}
 			ctx := context.Background()
