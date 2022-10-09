@@ -26,7 +26,7 @@ func New(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
 
 	// 接続確認(2秒経過しても接続確認出来なければタイムアウト)
 	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
-	defer cancel()
+	defer cancel() // 2秒経過すれば自動的にキャンセルされるが、確実にキャンセルするためにcancel関数も実行しておいた方が良い
 	if err := db.PingContext(ctx); err != nil {
 		return nil, func() {
 			_ = db.Close()

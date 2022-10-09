@@ -46,15 +46,15 @@ func TestNew(t *testing.T) {
 		tt := tt
 		t.Run(n, func(t *testing.T) {
 			t.Parallel()
-			gotDB, gotFunc, err := New(tt.args.ctx, tt.args.cfg)
-			if err != nil || tt.isWantErr == true {
-				if err != nil && tt.isWantErr == false {
-					t.Fatalf("unexpected error occurred: %+v", err)
-				} else if err == nil && tt.isWantErr == true {
+			gotDB, gotFunc, gotErr := New(tt.args.ctx, tt.args.cfg)
+			if gotErr != nil || tt.isWantErr == true {
+				if gotErr != nil && tt.isWantErr == false {
+					t.Fatalf("unexpected error occurred: %+v", gotErr)
+				} else if gotErr == nil && tt.isWantErr == true {
 					t.Error("expected error, but got error is nil")
 				} else {
 					// 期待通りにエラーになった場合はこの時点でテスト成功とする
-					fmt.Printf("error occurred as expected: %+v\n", err)
+					fmt.Printf("error occurred as expected: %+v\n", gotErr)
 					return
 				}
 			}
@@ -62,13 +62,13 @@ func TestNew(t *testing.T) {
 			// 接続出来ればOK
 			ctx, cancel := context.WithTimeout(tt.args.ctx, 2*time.Second)
 			defer cancel()
-			if err = gotDB.PingContext(ctx); err != nil {
+			if err := gotDB.PingContext(ctx); err != nil {
 				t.Errorf("failed to connect DB: %+v", err)
 			}
 			// コネクションクローズ
 			gotFunc()
 			// クローズしたので接続出来なければOK
-			if err = gotDB.PingContext(tt.args.ctx); err == nil {
+			if err := gotDB.PingContext(tt.args.ctx); err == nil {
 				t.Errorf("failed to close DB connection: %+v", err)
 			}
 		})
