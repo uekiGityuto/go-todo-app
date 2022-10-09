@@ -17,7 +17,7 @@ services:
       - .:/app
     ports:
       - "18000:8080"
-  tod-db:
+  todo-db:
     image: mysql:8.0.29
     platform: linux/amd64
     container_name: todo-db
