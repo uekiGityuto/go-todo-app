@@ -116,6 +116,9 @@ func TestRepository_AddTask(t *testing.T) {
 	xdb := sqlx.NewDb(db, "mysql")
 	sut := &Repository{Clocker: c}
 	if err := sut.AddTask(ctx, xdb, okTask); err != nil {
-		t.Errorf("want no error, but got %v", err)
+		t.Errorf("want no error, but got '%+v'", err)
+	}
+	if diff := cmp.Diff(okTask.ID, entity.TaskID(wantID)); diff != "" {
+		t.Errorf("got differs: (-got +want)\n%s", diff)
 	}
 }
