@@ -65,12 +65,15 @@ func TestAddTask(t *testing.T) {
 			}
 			ctx := context.Background()
 			got, err := sut.AddTask(ctx, title)
-			if err != nil {
-				if err.Error() != tt.wantErr.Error() {
+			if err != nil || tt.wantErr != nil {
+				if err != nil && tt.wantErr == nil {
 					t.Fatalf("unexpected error occurred: %+v", err)
+				} else if err == nil && tt.wantErr != nil {
+					t.Errorf("expected error is '%+v', but got error is nil", tt.wantErr)
+				} else if err.Error() != tt.wantErr.Error() {
+					t.Errorf("expected error is '%+v', but got error is '%+v'", tt.wantErr, err)
 				}
 			}
-
 			if diff := cmp.Diff(got, tt.want); diff != "" {
 				t.Errorf("got differs: (-got +want)\n%s", diff)
 			}
