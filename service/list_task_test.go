@@ -67,11 +67,6 @@ func TestListTasks(t *testing.T) {
 			}
 			ctx := context.Background()
 			got, err := sut.ListTasks(ctx)
-			//if err != nil {
-			//	if err.Error() != tt.wantErr.Error() {
-			//		t.Fatalf("unexpected error occurred: %+v", err)
-			//	}
-			//}
 			if err != nil || tt.wantErr != nil {
 				if err != nil && tt.wantErr == nil {
 					t.Fatalf("unexpected error occurred: %+v", err)
