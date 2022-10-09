@@ -3,9 +3,10 @@ package store
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
 	"time"
+
+	"github.com/uekiGityuto/go_todo_app/testutil"
 
 	"github.com/uekiGityuto/go_todo_app/config"
 )
@@ -15,22 +16,11 @@ func TestNew(t *testing.T) {
 		ctx context.Context
 		cfg *config.Config
 	}
-	// DBに接続するためのconfigを設定する。
-	// config.New()を使わずに*config.Configに一つずつ値を設定した方が疎結合になるので良いかもしれないが、
-	// DBに接続するためのデフォルト値を*config.Configで管理しているので、それを利用した方が良いと思い、config.New()を実行する形にした。
-	correctCfg, err := config.New()
-	if err != nil {
-		t.Fatalf("cannot create config: %v", err)
-	}
-	if _, defined := os.LookupEnv("CI"); defined {
-		correctCfg.DBPort = 3306 // CIで実行する場合はCIで実行するようのポート番号に上書きする
-	}
+	// DB接続に成功するようなconfigを設定する。
+	correctCfg := testutil.NewConfig(t)
 
 	// DB接続に失敗するようなconfigを設定する。
-	incorrectCfg, err := config.New()
-	if err != nil {
-		t.Fatalf("cannot create config: %v", err)
-	}
+	incorrectCfg := testutil.NewConfig(t)
 	incorrectCfg.DBPort = 99999 // 正しくないポート番号を設定
 
 	tests := map[string]struct {
