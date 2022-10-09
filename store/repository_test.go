@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
@@ -18,11 +19,15 @@ func TestNew(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cannot create config: %v", err)
 	}
+	if _, defined := os.LookupEnv("CI"); defined {
+		correctCfg.DBPort = 3306 // CIで実行する場合はCIで実行するようのポート番号に上書きする
+	}
+
 	incorrectCfg, err := config.New()
 	if err != nil {
 		t.Fatalf("cannot create config: %v", err)
 	}
-	incorrectCfg.DBPort = 99999
+	incorrectCfg.DBPort = 99999 // 正しくないポート番号を設定
 
 	tests := map[string]struct {
 		args      args
