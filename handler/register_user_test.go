@@ -9,12 +9,13 @@ import (
 	"testing"
 
 	"github.com/go-playground/validator/v10"
+
 	"github.com/uekiGityuto/go_todo_app/entity"
 	"github.com/uekiGityuto/go_todo_app/testutil"
 )
 
-func TestAddTask(t *testing.T) {
-	t.Parallel() // 他のテストと並行して実行する
+func TestRegisterUser(t *testing.T) {
+	t.Parallel()
 
 	type want struct {
 		status  int
@@ -25,50 +26,46 @@ func TestAddTask(t *testing.T) {
 		want    want
 	}{
 		"ok": {
-			reqFile: "testdata/add_task/ok_req.json.golden",
+			reqFile: "testdata/register_user/ok_req.json.golden",
 			want: want{
 				status:  http.StatusOK,
-				rspFile: "testdata/add_task/ok_rsp.json.golden",
+				rspFile: "testdata/register_user/ok_rsp.json.golden",
 			},
 		},
 		"badRequest": {
-			reqFile: "testdata/add_task/bad_req.json.golden",
+			reqFile: "testdata/register_user/bad_req.json.golden",
 			want: want{
 				status:  http.StatusBadRequest,
-				rspFile: "testdata/add_task/bad_req_rsp.json.golden",
+				rspFile: "testdata/register_user/bad_req_rsp.json.golden",
 			},
 		},
 	}
 
 	for n, tt := range tests {
-		// ゴルーチンで使用されるttを束縛する（ゴルーチンでは宣言時ではなく利用時のttを参照してしまうため）
-		// 参照: https://github.com/golang/go/wiki/TableDrivenTests#parallel-testing
 		tt := tt
-		t.Run(n, func(t *testing.T) { // サブテストをゴルーチンで実行する
-			t.Parallel() // 他のテストと並行して実行する
+		t.Run(n, func(t *testing.T) {
+			t.Parallel()
 
 			w := httptest.NewRecorder()
 			r := httptest.NewRequest(
 				http.MethodPost,
-				"/tasks",
+				"/register",
 				bytes.NewReader(testutil.LoadFile(t, tt.reqFile)),
 			)
 
-			moq := &AddTaskServiceMock{}
-			moq.AddTaskFunc = func(ctx context.Context, title string) (*entity.Task, error) {
+			moq := &RegisterUserServiceMock{}
+			moq.RegisterUserFunc = func(ctx context.Context, name, password, role string) (*entity.User, error) {
 				if tt.want.status == http.StatusOK {
-					return &entity.Task{ID: 1}, nil
+					return &entity.User{ID: 1}, nil
 				}
 				return nil, errors.New("error from mock")
 			}
 
-			// sutはSystems under Test(テスト対象物)の略
-			sut := AddTask{
+			sut := RegisterUser{
 				Service:   moq,
 				Validator: validator.New(),
 			}
 			sut.ServeHTTP(w, r)
-
 			resp := w.Result()
 			testutil.AssertResponse(t, resp, tt.want.status, testutil.LoadFile(t, tt.want.rspFile))
 		})

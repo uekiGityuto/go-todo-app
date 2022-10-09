@@ -24,7 +24,7 @@ func TestRepository_RegisterUser(t *testing.T) {
 	okUser := &entity.User{
 		Name:     "uekiGityuto",
 		Password: "password",
-		Role:     "read-only",
+		Role:     "user",
 		Created:  c.Now(),
 		Modified: c.Now(),
 	}
@@ -66,7 +66,7 @@ func TestRepository_RegisterUserWhenDuplicate(t *testing.T) {
 	user := &entity.User{
 		Name:     "uekiGityuto",
 		Password: "password",
-		Role:     "read-only",
+		Role:     "user",
 		Created:  c.Now(),
 		Modified: c.Now(),
 	}
