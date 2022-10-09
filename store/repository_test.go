@@ -15,6 +15,9 @@ func TestNew(t *testing.T) {
 		ctx context.Context
 		cfg *config.Config
 	}
+	// DBに接続するためのconfigを設定する。
+	// config.New()を使わずに*config.Configに一つずつ値を設定した方が疎結合になるので良いかもしれないが、
+	// DBに接続するためのデフォルト値を*config.Configで管理しているので、それを利用した方が良いと思い、config.New()を実行する形にした。
 	correctCfg, err := config.New()
 	if err != nil {
 		t.Fatalf("cannot create config: %v", err)
