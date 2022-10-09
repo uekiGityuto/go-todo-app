@@ -33,7 +33,6 @@ func TestRepository_RegisterUser(t *testing.T) {
 	t.Cleanup(func() {
 		db.Close()
 	})
-	//mock.ExpectExec(`INSERT INTO task \(title, status, created, modified\) VALUES \(\?, \?, \?, \?\)`).
 	mock.ExpectExec(`INSERT INTO user`).
 		WithArgs(okUser.Name, okUser.Password, okUser.Role, c.Now(), c.Now()).
 		WillReturnResult(sqlmock.NewResult(wantID, 1))
