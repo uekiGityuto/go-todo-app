@@ -62,6 +62,11 @@ func TestRepository_RegisterUserWhenDuplicate(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	// 一度綺麗にしておく
+	if _, err := tx.ExecContext(ctx, "DELETE FROM user;"); err != nil {
+		t.Logf("failed to initialize task: %v", err)
+	}
+
 	c := clock.FixedClocker{}
 	user := &entity.User{
 		Name:     "uekiGityuto",
