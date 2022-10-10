@@ -34,7 +34,7 @@ services:
     ports:
       - "33306:3306"
   todo-redis:
-    image: "redis:latest"
+    image: "redis:6.2"
     container_name: todo-redis
     volumes:
       - todo-redis-data:/data

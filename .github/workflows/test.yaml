@@ -23,7 +23,7 @@ jobs:
             MYSQL_PASSWORD: todo
             MYSQL_DATABASE: todo
         redis:
-          image: redis
+          image: redis:6.2
           options: >-
             --health-cmd "redis-cli ping"
             --health-interval 10s

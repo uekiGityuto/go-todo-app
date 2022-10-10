@@ -14,9 +14,11 @@ func TestNew(t *testing.T) {
 		t.Fatalf("cannot create config: %v", err)
 	}
 
+	// 環境変数の値がセットされるか確認
 	if got.Port != wantPort {
 		t.Errorf("want %d, but %d", wantPort, got.Port)
 	}
+	// 環境変数の値がないときにデフォルトの値がセットされるか確認
 	wantEnv := "dev"
 	if got.Env != wantEnv {
 		t.Errorf("want %s, but %s", wantEnv, got.Env)
@@ -40,5 +42,13 @@ func TestNew(t *testing.T) {
 	wantDBName := "todo"
 	if got.DBName != wantDBName {
 		t.Errorf("want %s, but %s", wantDBName, got.DBHost)
+	}
+	wantRedisHost := "127.0.0.1"
+	if got.RedisHost != wantRedisHost {
+		t.Errorf("want %s, but %s", wantRedisHost, got.RedisHost)
+	}
+	wantRedisPort := 36379
+	if got.RedisPort != wantRedisPort {
+		t.Errorf("want %d, but %d", wantRedisPort, got.RedisPort)
 	}
 }
