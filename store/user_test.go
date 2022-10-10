@@ -92,7 +92,8 @@ func TestRepository_RegisterUser_WhenDuplicate(t *testing.T) {
 	}
 }
 
-func prepareUser(ctx context.Context, t *testing.T, con Execer, u *entity.User) *entity.User {
+// TODO: task_test.goのprepareUserとまとめる
+func prepareUserForUserTest(ctx context.Context, t *testing.T, con Execer, u *entity.User) *entity.User {
 	t.Helper()
 	// 一度綺麗にしておく
 	if _, err := con.ExecContext(ctx, "DELETE FROM user;"); err != nil {
@@ -133,7 +134,7 @@ func TestRepository_GetUser(t *testing.T) {
 		Created:  clock.FixedClocker{}.Now(),
 		Modified: clock.FixedClocker{}.Now(),
 	}
-	want := prepareUser(ctx, t, tx, user)
+	want := prepareUserForUserTest(ctx, t, tx, user)
 
 	sut := &Repository{}
 	got, err := sut.GetUser(ctx, tx, name)

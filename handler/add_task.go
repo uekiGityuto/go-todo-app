@@ -8,6 +8,7 @@ import (
 	"github.com/uekiGityuto/go_todo_app/entity"
 )
 
+// AddTask タスクを追加するためのハンドラー。ServeHTTPを持つので、http.Handlerインターフェースを満たす。
 type AddTask struct {
 	Service   AddTaskService
 	Validator *validator.Validate

@@ -14,7 +14,7 @@ type TaskAdder interface {
 }
 
 type TaskLister interface {
-	ListTasks(ctx context.Context, db store.Queryer) (entity.Tasks, error)
+	ListTasks(ctx context.Context, db store.Queryer, id entity.UserID) (entity.Tasks, error)
 }
 
 type UserRegister interface {

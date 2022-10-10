@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/uekiGityuto/go_todo_app/auth"
+
 	"github.com/google/go-cmp/cmp"
 
 	"github.com/uekiGityuto/go_todo_app/entity"
@@ -14,15 +16,18 @@ import (
 )
 
 func TestListTasks(t *testing.T) {
+	userID := entity.UserID(1)
 	tasks := []*entity.Task{
 		{
 			ID:       entity.TaskID(1),
+			UserID:   userID,
 			Title:    "テストタスク1",
 			Status:   entity.TaskStatusTodo,
 			Created:  time.Date(2022, 5, 10, 12, 34, 56, 0, time.UTC),
 			Modified: time.Date(2022, 5, 10, 12, 34, 56, 0, time.UTC),
 		}, {
 			ID:       entity.TaskID(2),
+			UserID:   userID,
 			Title:    "テストタスク2",
 			Status:   entity.TaskStatusDoing,
 			Created:  time.Date(2022, 5, 11, 12, 34, 56, 0, time.UTC),
@@ -38,7 +43,7 @@ func TestListTasks(t *testing.T) {
 	}{
 		"ok": {
 			moq: &TaskListerMock{
-				ListTasksFunc: func(ctx context.Context, db store.Queryer) (entity.Tasks, error) {
+				ListTasksFunc: func(ctx context.Context, db store.Queryer, id entity.UserID) (entity.Tasks, error) {
 					return tasks, nil
 				},
 			},
@@ -47,7 +52,7 @@ func TestListTasks(t *testing.T) {
 		},
 		"error": {
 			moq: &TaskListerMock{
-				ListTasksFunc: func(ctx context.Context, db store.Queryer) (entity.Tasks, error) {
+				ListTasksFunc: func(ctx context.Context, db store.Queryer, id entity.UserID) (entity.Tasks, error) {
 					return nil, errors.New("error in repository")
 				},
 			},
@@ -66,6 +71,7 @@ func TestListTasks(t *testing.T) {
 				Repo: tt.moq,
 			}
 			ctx := context.Background()
+			ctx = auth.SetUserID(ctx, userID) // 本当はauth.GetUserIDをモックに置き換えられるようにした方が良い気がする。
 			got, err := sut.ListTasks(ctx)
 			if err != nil || tt.wantErr != nil {
 				if err != nil && tt.wantErr == nil {
