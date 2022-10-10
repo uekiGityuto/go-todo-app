@@ -7,6 +7,8 @@ import (
 
 func TestNew(t *testing.T) {
 	wantPort := 3333
+	wantRedisPort := 6379
+	wantDBPort := 3306
 	t.Setenv("PORT", fmt.Sprint(wantPort))
 
 	got, err := New()
@@ -18,6 +20,12 @@ func TestNew(t *testing.T) {
 	if got.Port != wantPort {
 		t.Errorf("want %d, but %d", wantPort, got.Port)
 	}
+	if got.DBPort != wantDBPort {
+		t.Errorf("want %d, but %d", wantDBPort, got.DBPort)
+	}
+	if got.RedisPort != wantRedisPort {
+		t.Errorf("want %d, but %d", wantRedisPort, got.RedisPort)
+	}
 	// 環境変数の値がないときにデフォルトの値がセットされるか確認
 	wantEnv := "dev"
 	if got.Env != wantEnv {
@@ -26,10 +34,6 @@ func TestNew(t *testing.T) {
 	wantDBHost := "127.0.0.1"
 	if got.DBHost != wantDBHost {
 		t.Errorf("want %s, but %s", wantDBHost, got.DBHost)
-	}
-	wantDBPort := 33306
-	if got.DBPort != wantDBPort {
-		t.Errorf("want %d, but %d", wantDBPort, got.DBPort)
 	}
 	wantDBUser := "todo"
 	if got.DBUser != wantDBUser {
@@ -46,9 +50,5 @@ func TestNew(t *testing.T) {
 	wantRedisHost := "127.0.0.1"
 	if got.RedisHost != wantRedisHost {
 		t.Errorf("want %s, but %s", wantRedisHost, got.RedisHost)
-	}
-	wantRedisPort := 36379
-	if got.RedisPort != wantRedisPort {
-		t.Errorf("want %d, but %d", wantRedisPort, got.RedisPort)
 	}
 }
