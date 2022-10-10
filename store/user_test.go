@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/uekiGityuto/go_todo_app/testutil/fixture"
-
 	"github.com/uekiGityuto/go_todo_app/testutil"
 
 	"github.com/google/go-cmp/cmp"
@@ -129,9 +127,12 @@ func TestRepository_GetUser(t *testing.T) {
 
 	name := "uekiGityuto"
 	user := &entity.User{
-		Name: name,
+		Name:     name,
+		Password: "password",
+		Role:     "admin",
+		Created:  clock.FixedClocker{}.Now(),
+		Modified: clock.FixedClocker{}.Now(),
 	}
-	user = fixture.User(user)
 	want := prepareUser(ctx, t, tx, user)
 
 	sut := &Repository{}
