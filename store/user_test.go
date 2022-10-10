@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/uekiGityuto/go_todo_app/testutil/fixture"
+
 	"github.com/uekiGityuto/go_todo_app/testutil"
 
 	"github.com/google/go-cmp/cmp"
@@ -50,7 +52,7 @@ func TestRepository_RegisterUser(t *testing.T) {
 	}
 }
 
-func TestRepository_RegisterUserWhenDuplicate(t *testing.T) {
+func TestRepository_RegisterUser_WhenDuplicate(t *testing.T) {
 	ctx := context.Background()
 	// トランザクションを張ることでこのテストケースの中だけのテーブル状態にする
 	tx, err := testutil.OpenDBForTest(t).BeginTxx(ctx, nil)
@@ -64,7 +66,7 @@ func TestRepository_RegisterUserWhenDuplicate(t *testing.T) {
 
 	// 一度綺麗にしておく
 	if _, err := tx.ExecContext(ctx, "DELETE FROM user;"); err != nil {
-		t.Logf("failed to initialize task: %v", err)
+		t.Logf("failed to initialize user: %v", err)
 	}
 
 	c := clock.FixedClocker{}
@@ -89,5 +91,55 @@ func TestRepository_RegisterUserWhenDuplicate(t *testing.T) {
 		t.Errorf("expected error is '%+v', but got error is nil", wantErr)
 	} else if err.Error() != wantErr.Error() {
 		t.Errorf("expected error is '%+v', but got error is '%+v'", wantErr, err)
+	}
+}
+
+func prepareUser(ctx context.Context, t *testing.T, con Execer, u *entity.User) *entity.User {
+	t.Helper()
+	// 一度綺麗にしておく
+	if _, err := con.ExecContext(ctx, "DELETE FROM user;"); err != nil {
+		t.Logf("failed to initialize user: %v", err)
+	}
+
+	sql := `INSERT INTO user (name, password, role, created, modified) VALUES (?, ?, ?, ?, ?);`
+	result, err := con.ExecContext(ctx, sql, u.Name, u.Password, u.Role, u.Created, u.Modified)
+	if err != nil {
+		t.Fatal(err)
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		t.Fatal(err)
+	}
+	u.ID = entity.UserID(id)
+
+	return u
+}
+
+func TestRepository_GetUser(t *testing.T) {
+	ctx := context.Background()
+	// トランザクションを張ることでこのテストケースの中だけのテーブル状態にする
+	tx, err := testutil.OpenDBForTest(t).BeginTxx(ctx, nil)
+	// このテストケースが終わったらテーブルの状態を元に戻す
+	t.Cleanup(func() {
+		_ = tx.Rollback()
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	name := "uekiGityuto"
+	user := &entity.User{
+		Name: name,
+	}
+	user = fixture.User(user)
+	want := prepareUser(ctx, t, tx, user)
+
+	sut := &Repository{}
+	got, err := sut.GetUser(ctx, tx, name)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if d := cmp.Diff(got, want); len(d) != 0 {
+		t.Errorf("differs: (-got +want)\n%s", d)
 	}
 }
