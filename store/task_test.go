@@ -39,11 +39,11 @@ func prepareTasks(ctx context.Context, t *testing.T, con Execer) (entity.UserID,
 	t.Helper()
 
 	// 一度綺麗にしておく
-	if _, err := con.ExecContext(ctx, "DELETE FROM user;"); err != nil {
-		t.Logf("failed to initialize user: %v", err)
-	}
 	if _, err := con.ExecContext(ctx, "DELETE FROM task;"); err != nil {
 		t.Logf("failed to initialize task: %v", err)
+	}
+	if _, err := con.ExecContext(ctx, "DELETE FROM user;"); err != nil {
+		t.Logf("failed to initialize user: %v", err)
 	}
 
 	userID := prepareUser(ctx, t, con)

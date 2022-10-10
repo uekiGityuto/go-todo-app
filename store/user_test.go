@@ -63,6 +63,9 @@ func TestRepository_RegisterUser_WhenDuplicate(t *testing.T) {
 	}
 
 	// 一度綺麗にしておく
+	if _, err := tx.ExecContext(ctx, "DELETE FROM task;"); err != nil {
+		t.Logf("failed to initialize task: %v", err)
+	}
 	if _, err := tx.ExecContext(ctx, "DELETE FROM user;"); err != nil {
 		t.Logf("failed to initialize user: %v", err)
 	}
@@ -96,6 +99,9 @@ func TestRepository_RegisterUser_WhenDuplicate(t *testing.T) {
 func prepareUserForUserTest(ctx context.Context, t *testing.T, con Execer, u *entity.User) *entity.User {
 	t.Helper()
 	// 一度綺麗にしておく
+	if _, err := con.ExecContext(ctx, "DELETE FROM task;"); err != nil {
+		t.Logf("failed to initialize task: %v", err)
+	}
 	if _, err := con.ExecContext(ctx, "DELETE FROM user;"); err != nil {
 		t.Logf("failed to initialize user: %v", err)
 	}
