@@ -40,7 +40,6 @@ jobs:
             go install github.com/k0kubun/sqldef/cmd/mysqldef@latest
             mysqldef -u todo -p todo -h 127.0.0.1 -P 3306 todo < ./_tools/mysql/schema.sql
         - run: |
-            echo "redis port: $TODO_REDIS_PORT"
             go test ./... -coverprofile=coverage.out
           env:
             TODO_DB_PORT: 3306
