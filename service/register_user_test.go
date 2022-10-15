@@ -71,14 +71,14 @@ func TestRegisterUser(t *testing.T) {
 			ctx := context.Background()
 			got, err := sut.RegisterUser(ctx, user, password, role)
 			if err != nil || tt.wantErr != nil {
-				if err != nil && tt.wantErr == nil {
+				switch {
+				case err != nil && tt.wantErr == nil:
 					t.Fatalf("unexpected error occurred: %+v", err)
-				} else if err == nil && tt.wantErr != nil {
+				case err == nil && tt.wantErr != nil:
 					t.Errorf("expected error is '%+v', but got error is nil", tt.wantErr)
-				} else if err.Error() != tt.wantErr.Error() {
+				case err.Error() != tt.wantErr.Error():
 					t.Errorf("expected error is '%+v', but got error is '%+v'", tt.wantErr, err)
-				} else {
-					// 期待通りにエラーになった場合はこの時点でテスト成功とする
+				default:
 					return
 				}
 			}

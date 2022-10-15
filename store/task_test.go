@@ -148,7 +148,6 @@ func TestRepository_AddTask(t *testing.T) {
 	t.Cleanup(func() {
 		db.Close()
 	})
-	//mock.ExpectExec(`INSERT INTO task \(title, status, created, modified\) VALUES \(\?, \?, \?, \?\)`).
 	mock.ExpectExec(`INSERT INTO task`).
 		WithArgs(okTask.UserID, okTask.Title, okTask.Status, c.Now(), c.Now()).
 		WillReturnResult(sqlmock.NewResult(wantID, 1))

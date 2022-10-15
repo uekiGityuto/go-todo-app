@@ -2,11 +2,12 @@ package testutil
 
 import (
 	"encoding/json"
-	"github.com/google/go-cmp/cmp"
 	"io"
 	"net/http"
 	"os"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func AssertJSON(t *testing.T, want, got []byte) {

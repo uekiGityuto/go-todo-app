@@ -84,11 +84,12 @@ func TestLogin(t *testing.T) {
 			ctx := context.Background()
 			got, err := sut.Login(ctx, "uekiGityuto", pw)
 			if err != nil || tt.wantErr != nil {
-				if err != nil && tt.wantErr == nil {
+				switch {
+				case err != nil && tt.wantErr == nil:
 					t.Fatalf("unexpected error occurred: %+v", err)
-				} else if err == nil && tt.wantErr != nil {
+				case err == nil && tt.wantErr != nil:
 					t.Errorf("expected error is '%+v', but got error is nil", tt.wantErr)
-				} else if !errors.Is(err, tt.wantErr) {
+				case !errors.Is(err, tt.wantErr):
 					t.Errorf("expected error is '%+v', but got error is '%+v'", tt.wantErr, err)
 				}
 			}

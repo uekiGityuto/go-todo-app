@@ -48,12 +48,12 @@ func TestNew(t *testing.T) {
 			t.Parallel()
 			gotDB, gotFunc, gotErr := New(tt.args.ctx, tt.args.cfg)
 			if gotErr != nil || tt.isWantErr == true {
-				if gotErr != nil && tt.isWantErr == false {
+				switch {
+				case gotErr != nil && tt.isWantErr == false:
 					t.Fatalf("unexpected error occurred: %+v", gotErr)
-				} else if gotErr == nil && tt.isWantErr == true {
+				case gotErr == nil && tt.isWantErr == true:
 					t.Error("expected error, but got error is nil")
-				} else {
-					// 期待通りにエラーになった場合はこの時点でテスト成功とする
+				default:
 					fmt.Printf("error occurred as expected: %+v\n", gotErr)
 					return
 				}

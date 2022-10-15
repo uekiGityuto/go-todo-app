@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"golang.org/x/sync/errgroup"
 	"io"
 	"net"
 	"net/http"
 	"testing"
+
+	"golang.org/x/sync/errgroup"
 )
 
 func TestRun(t *testing.T) {
@@ -48,5 +49,4 @@ func TestRun(t *testing.T) {
 	if err := eg.Wait(); err != nil {
 		t.Fatal(err)
 	}
-
 }
