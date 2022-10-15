@@ -6,6 +6,7 @@ package handler
 import (
 	"context"
 	"github.com/uekiGityuto/go_todo_app/entity"
+	"net/http"
 	"sync"
 )
 
@@ -306,5 +307,71 @@ func (mock *LoginServiceMock) LoginCalls() []struct {
 	mock.lockLogin.RLock()
 	calls = mock.calls.Login
 	mock.lockLogin.RUnlock()
+	return calls
+}
+
+// Ensure, that LogoutServiceMock does implement LogoutService.
+// If this is not the case, regenerate this file with moq.
+var _ LogoutService = &LogoutServiceMock{}
+
+// LogoutServiceMock is a mock implementation of LogoutService.
+//
+//	func TestSomethingThatUsesLogoutService(t *testing.T) {
+//
+//		// make and configure a mocked LogoutService
+//		mockedLogoutService := &LogoutServiceMock{
+//			LogoutFunc: func(r *http.Request) error {
+//				panic("mock out the Logout method")
+//			},
+//		}
+//
+//		// use mockedLogoutService in code that requires LogoutService
+//		// and then make assertions.
+//
+//	}
+type LogoutServiceMock struct {
+	// LogoutFunc mocks the Logout method.
+	LogoutFunc func(r *http.Request) error
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// Logout holds details about calls to the Logout method.
+		Logout []struct {
+			// R is the r argument value.
+			R *http.Request
+		}
+	}
+	lockLogout sync.RWMutex
+}
+
+// Logout calls LogoutFunc.
+func (mock *LogoutServiceMock) Logout(r *http.Request) error {
+	if mock.LogoutFunc == nil {
+		panic("LogoutServiceMock.LogoutFunc: method is nil but LogoutService.Logout was just called")
+	}
+	callInfo := struct {
+		R *http.Request
+	}{
+		R: r,
+	}
+	mock.lockLogout.Lock()
+	mock.calls.Logout = append(mock.calls.Logout, callInfo)
+	mock.lockLogout.Unlock()
+	return mock.LogoutFunc(r)
+}
+
+// LogoutCalls gets all the calls that were made to Logout.
+// Check the length with:
+//
+//	len(mockedLogoutService.LogoutCalls())
+func (mock *LogoutServiceMock) LogoutCalls() []struct {
+	R *http.Request
+} {
+	var calls []struct {
+		R *http.Request
+	}
+	mock.lockLogout.RLock()
+	calls = mock.calls.Logout
+	mock.lockLogout.RUnlock()
 	return calls
 }

@@ -37,3 +37,7 @@ func (k *KVS) Load(ctx context.Context, key string) (entity.UserID, error) {
 	}
 	return entity.UserID(id), nil
 }
+
+func (k *KVS) Delete(ctx context.Context, key string) error {
+	return k.Client.Del(ctx, key).Err()
+}

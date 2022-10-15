@@ -28,12 +28,6 @@ type JWTer struct {
 	Clocker               clock.Clocker
 }
 
-//go:generate go run github.com/matryer/moq -out moq_test.go . Store
-type Store interface {
-	Save(ctx context.Context, key string, userID entity.UserID) error
-	Load(ctx context.Context, key string) (entity.UserID, error)
-}
-
 func NewJWTer(s Store, c clock.Clocker) (*JWTer, error) {
 	j := &JWTer{Store: s}
 	privKey, err := parse(rawPrivKey)
@@ -91,7 +85,7 @@ func (j *JWTer) GetToken(ctx context.Context, r *http.Request) (jwt.Token, error
 	token, err := jwt.ParseRequest(
 		r,
 		jwt.WithKey(jwa.RS256, j.PublicKey),
-		jwt.WithValidate(false),
+		jwt.WithValidate(false), // Clockerを外部から指定できるようにValidateは別途実施するため、ここはfalse
 	)
 	if err != nil {
 		return nil, err
@@ -155,4 +149,12 @@ func IsAdmin(ctx context.Context) bool {
 		return false
 	}
 	return role == "admin"
+}
+
+func (j *JWTer) DeleteUserID(r *http.Request) error {
+	token, err := j.GetToken(r.Context(), r)
+	if err != nil {
+		return err
+	}
+	return j.Store.Delete(r.Context(), token.JwtID())
 }

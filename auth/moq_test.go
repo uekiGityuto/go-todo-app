@@ -19,6 +19,9 @@ var _ Store = &StoreMock{}
 //
 //		// make and configure a mocked Store
 //		mockedStore := &StoreMock{
+//			DeleteFunc: func(ctx context.Context, key string) error {
+//				panic("mock out the Delete method")
+//			},
 //			LoadFunc: func(ctx context.Context, key string) (entity.UserID, error) {
 //				panic("mock out the Load method")
 //			},
@@ -32,6 +35,9 @@ var _ Store = &StoreMock{}
 //
 //	}
 type StoreMock struct {
+	// DeleteFunc mocks the Delete method.
+	DeleteFunc func(ctx context.Context, key string) error
+
 	// LoadFunc mocks the Load method.
 	LoadFunc func(ctx context.Context, key string) (entity.UserID, error)
 
@@ -40,6 +46,13 @@ type StoreMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
+		// Delete holds details about calls to the Delete method.
+		Delete []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Key is the key argument value.
+			Key string
+		}
 		// Load holds details about calls to the Load method.
 		Load []struct {
 			// Ctx is the ctx argument value.
@@ -57,8 +70,45 @@ type StoreMock struct {
 			UserID entity.UserID
 		}
 	}
-	lockLoad sync.RWMutex
-	lockSave sync.RWMutex
+	lockDelete sync.RWMutex
+	lockLoad   sync.RWMutex
+	lockSave   sync.RWMutex
+}
+
+// Delete calls DeleteFunc.
+func (mock *StoreMock) Delete(ctx context.Context, key string) error {
+	if mock.DeleteFunc == nil {
+		panic("StoreMock.DeleteFunc: method is nil but Store.Delete was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		Key string
+	}{
+		Ctx: ctx,
+		Key: key,
+	}
+	mock.lockDelete.Lock()
+	mock.calls.Delete = append(mock.calls.Delete, callInfo)
+	mock.lockDelete.Unlock()
+	return mock.DeleteFunc(ctx, key)
+}
+
+// DeleteCalls gets all the calls that were made to Delete.
+// Check the length with:
+//
+//	len(mockedStore.DeleteCalls())
+func (mock *StoreMock) DeleteCalls() []struct {
+	Ctx context.Context
+	Key string
+} {
+	var calls []struct {
+		Ctx context.Context
+		Key string
+	}
+	mock.lockDelete.RLock()
+	calls = mock.calls.Delete
+	mock.lockDelete.RUnlock()
+	return calls
 }
 
 // Load calls LoadFunc.

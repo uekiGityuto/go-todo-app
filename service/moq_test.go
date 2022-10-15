@@ -7,6 +7,7 @@ import (
 	"context"
 	"github.com/uekiGityuto/go_todo_app/entity"
 	"github.com/uekiGityuto/go_todo_app/store"
+	"net/http"
 	"sync"
 )
 
@@ -391,5 +392,71 @@ func (mock *TokenGeneratorMock) GenerateTokenCalls() []struct {
 	mock.lockGenerateToken.RLock()
 	calls = mock.calls.GenerateToken
 	mock.lockGenerateToken.RUnlock()
+	return calls
+}
+
+// Ensure, that UserIDDeleterMock does implement UserIDDeleter.
+// If this is not the case, regenerate this file with moq.
+var _ UserIDDeleter = &UserIDDeleterMock{}
+
+// UserIDDeleterMock is a mock implementation of UserIDDeleter.
+//
+//	func TestSomethingThatUsesUserIDDeleter(t *testing.T) {
+//
+//		// make and configure a mocked UserIDDeleter
+//		mockedUserIDDeleter := &UserIDDeleterMock{
+//			DeleteUserIDFunc: func(r *http.Request) error {
+//				panic("mock out the DeleteUserID method")
+//			},
+//		}
+//
+//		// use mockedUserIDDeleter in code that requires UserIDDeleter
+//		// and then make assertions.
+//
+//	}
+type UserIDDeleterMock struct {
+	// DeleteUserIDFunc mocks the DeleteUserID method.
+	DeleteUserIDFunc func(r *http.Request) error
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// DeleteUserID holds details about calls to the DeleteUserID method.
+		DeleteUserID []struct {
+			// R is the r argument value.
+			R *http.Request
+		}
+	}
+	lockDeleteUserID sync.RWMutex
+}
+
+// DeleteUserID calls DeleteUserIDFunc.
+func (mock *UserIDDeleterMock) DeleteUserID(r *http.Request) error {
+	if mock.DeleteUserIDFunc == nil {
+		panic("UserIDDeleterMock.DeleteUserIDFunc: method is nil but UserIDDeleter.DeleteUserID was just called")
+	}
+	callInfo := struct {
+		R *http.Request
+	}{
+		R: r,
+	}
+	mock.lockDeleteUserID.Lock()
+	mock.calls.DeleteUserID = append(mock.calls.DeleteUserID, callInfo)
+	mock.lockDeleteUserID.Unlock()
+	return mock.DeleteUserIDFunc(r)
+}
+
+// DeleteUserIDCalls gets all the calls that were made to DeleteUserID.
+// Check the length with:
+//
+//	len(mockedUserIDDeleter.DeleteUserIDCalls())
+func (mock *UserIDDeleterMock) DeleteUserIDCalls() []struct {
+	R *http.Request
+} {
+	var calls []struct {
+		R *http.Request
+	}
+	mock.lockDeleteUserID.RLock()
+	calls = mock.calls.DeleteUserID
+	mock.lockDeleteUserID.RUnlock()
 	return calls
 }
