@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/uekiGityuto/go_todo_app/testutil/fixture"
-
 	"github.com/jmoiron/sqlx"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -17,23 +15,6 @@ import (
 
 	"github.com/uekiGityuto/go_todo_app/testutil"
 )
-
-func prepareUser(ctx context.Context, t *testing.T, con Execer) entity.UserID {
-	t.Helper()
-
-	u := fixture.User(nil)
-	sql := `INSERT INTO user (name, password, role, created, modified) VALUES (?, ?, ?, ?, ?);`
-	result, err := con.ExecContext(ctx, sql, u.Name, u.Password, u.Role, u.Created, u.Modified)
-	if err != nil {
-		t.Fatalf("failed to insert user: %v", err)
-	}
-
-	id, err := result.LastInsertId()
-	if err != nil {
-		t.Fatalf("failed to got user_id: %v", err)
-	}
-	return entity.UserID(id)
-}
 
 func prepareTasks(ctx context.Context, t *testing.T, con Execer) (entity.UserID, entity.Tasks) {
 	t.Helper()

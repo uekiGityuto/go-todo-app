@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/uekiGityuto/go_todo_app/testutil/fixture"
+
 	"github.com/uekiGityuto/go_todo_app/testutil"
 
 	"github.com/google/go-cmp/cmp"
@@ -14,6 +16,47 @@ import (
 	"github.com/uekiGityuto/go_todo_app/clock"
 	"github.com/uekiGityuto/go_todo_app/entity"
 )
+
+func prepareUser(ctx context.Context, t *testing.T, con Execer) entity.UserID {
+	t.Helper()
+
+	u := fixture.User(nil)
+	sql := `INSERT INTO user (name, password, role, created, modified) VALUES (?, ?, ?, ?, ?);`
+	result, err := con.ExecContext(ctx, sql, u.Name, u.Password, u.Role, u.Created, u.Modified)
+	if err != nil {
+		t.Fatalf("failed to insert user: %v", err)
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		t.Fatalf("failed to got user_id: %v", err)
+	}
+	return entity.UserID(id)
+}
+
+func prepareUserWithUser(ctx context.Context, t *testing.T, con Execer, u *entity.User) *entity.User {
+	t.Helper()
+	// 一度綺麗にしておく
+	if _, err := con.ExecContext(ctx, "DELETE FROM task;"); err != nil {
+		t.Logf("failed to initialize task: %v", err)
+	}
+	if _, err := con.ExecContext(ctx, "DELETE FROM user;"); err != nil {
+		t.Logf("failed to initialize user: %v", err)
+	}
+
+	sql := `INSERT INTO user (name, password, role, created, modified) VALUES (?, ?, ?, ?, ?);`
+	result, err := con.ExecContext(ctx, sql, u.Name, u.Password, u.Role, u.Created, u.Modified)
+	if err != nil {
+		t.Fatal(err)
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		t.Fatal(err)
+	}
+	u.ID = entity.UserID(id)
+
+	return u
+}
 
 func TestRepository_RegisterUser(t *testing.T) {
 	t.Parallel()
@@ -95,31 +138,6 @@ func TestRepository_RegisterUser_WhenDuplicate(t *testing.T) {
 	}
 }
 
-// TODO: task_test.goのprepareUserとまとめる
-func prepareUserForUserTest(ctx context.Context, t *testing.T, con Execer, u *entity.User) *entity.User {
-	t.Helper()
-	// 一度綺麗にしておく
-	if _, err := con.ExecContext(ctx, "DELETE FROM task;"); err != nil {
-		t.Logf("failed to initialize task: %v", err)
-	}
-	if _, err := con.ExecContext(ctx, "DELETE FROM user;"); err != nil {
-		t.Logf("failed to initialize user: %v", err)
-	}
-
-	sql := `INSERT INTO user (name, password, role, created, modified) VALUES (?, ?, ?, ?, ?);`
-	result, err := con.ExecContext(ctx, sql, u.Name, u.Password, u.Role, u.Created, u.Modified)
-	if err != nil {
-		t.Fatal(err)
-	}
-	id, err := result.LastInsertId()
-	if err != nil {
-		t.Fatal(err)
-	}
-	u.ID = entity.UserID(id)
-
-	return u
-}
-
 func TestRepository_GetUser(t *testing.T) {
 	ctx := context.Background()
 	// トランザクションを張ることでこのテストケースの中だけのテーブル状態にする
@@ -140,7 +158,7 @@ func TestRepository_GetUser(t *testing.T) {
 		Created:  clock.FixedClocker{}.Now(),
 		Modified: clock.FixedClocker{}.Now(),
 	}
-	want := prepareUserForUserTest(ctx, t, tx, user)
+	want := prepareUserWithUser(ctx, t, tx, user)
 
 	sut := &Repository{}
 	got, err := sut.GetUser(ctx, tx, name)
