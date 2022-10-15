@@ -63,3 +63,47 @@ func TestKVS_Load(t *testing.T) {
 		}
 	})
 }
+
+func TestKVS_Delete(t *testing.T) {
+	t.Parallel()
+
+	client := testutil.OpenRedisForTest(t)
+	sut := &KVS{Client: client}
+
+	t.Run("ok", func(t *testing.T) {
+		t.Parallel()
+
+		key := "TestKVS_Delete_ok"
+		uid := entity.UserID(1234)
+		ctx := context.Background()
+		client.Set(ctx, key, int64(uid), 30*time.Minute)
+		t.Cleanup(func() {
+			client.Del(ctx, key)
+		})
+		err := sut.Delete(ctx, key)
+		if err != nil {
+			t.Fatalf("want no error, but got %v", err)
+		}
+		// 存在しなければOK
+		_, err = client.Get(ctx, key).Int64()
+		if err == nil {
+			t.Error("want error, but no error")
+		}
+	})
+
+	t.Run("notFound", func(t *testing.T) {
+		t.Parallel()
+
+		key := "TestKVS_Delete_notFound"
+		ctx := context.Background()
+		err := sut.Delete(ctx, key)
+		if err != nil {
+			t.Fatalf("want no error, but got %v", err)
+		}
+		// 存在しなければOK
+		_, err = client.Get(ctx, key).Int64()
+		if err == nil {
+			t.Error("want error, but no error")
+		}
+	})
+}

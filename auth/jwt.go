@@ -85,7 +85,7 @@ func (j *JWTer) GetToken(ctx context.Context, r *http.Request) (jwt.Token, error
 	token, err := jwt.ParseRequest(
 		r,
 		jwt.WithKey(jwa.RS256, j.PublicKey),
-		jwt.WithValidate(false),
+		jwt.WithValidate(false), // Clockerを外部から指定できるようにValidateは別途実施するため、ここはfalse
 	)
 	if err != nil {
 		return nil, err
@@ -149,4 +149,12 @@ func IsAdmin(ctx context.Context) bool {
 		return false
 	}
 	return role == "admin"
+}
+
+func (j *JWTer) DeleteUserID(r *http.Request) error {
+	token, err := j.GetToken(r.Context(), r)
+	if err != nil {
+		return err
+	}
+	return j.Store.Delete(r.Context(), token.JwtID())
 }

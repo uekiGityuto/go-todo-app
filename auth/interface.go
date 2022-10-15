@@ -10,4 +10,5 @@ import (
 type Store interface {
 	Save(ctx context.Context, key string, userID entity.UserID) error
 	Load(ctx context.Context, key string) (entity.UserID, error)
+	Delete(ctx context.Context, key string) error
 }

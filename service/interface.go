@@ -2,12 +2,13 @@ package service
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/uekiGityuto/go_todo_app/entity"
 	"github.com/uekiGityuto/go_todo_app/store"
 )
 
-//go:generate go run github.com/matryer/moq -out moq_test.go . TaskAdder TaskLister UserRegister UserGetter TokenGenerator
+//go:generate go run github.com/matryer/moq -out moq_test.go . TaskAdder TaskLister UserRegister UserGetter TokenGenerator UserIDDeleter
 
 type TaskAdder interface {
 	AddTask(ctx context.Context, db store.Execer, t *entity.Task) error
@@ -27,4 +28,8 @@ type UserGetter interface {
 
 type TokenGenerator interface {
 	GenerateToken(ctx context.Context, u entity.User) ([]byte, error)
+}
+
+type UserIDDeleter interface {
+	DeleteUserID(r *http.Request) error
 }

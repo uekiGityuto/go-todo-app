@@ -86,7 +86,6 @@ func TestJWTer_GetToken(t *testing.T) {
 	}
 
 	userID := entity.UserID(20)
-	ctx := context.Background()
 	moq := &StoreMock{}
 	moq.LoadFunc = func(ctx context.Context, key string) (entity.UserID, error) {
 		return userID, nil
@@ -96,6 +95,7 @@ func TestJWTer_GetToken(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	ctx := context.Background()
 	req := httptest.NewRequest(
 		http.MethodGet,
 		`https://github.com/uekiGityuto`,
@@ -189,5 +189,112 @@ func TestJWTer_GetToken_NG(t *testing.T) {
 				t.Errorf("want nil, but got %v", got)
 			}
 		})
+	}
+}
+
+func TestJWTer_FillContext(t *testing.T) {
+	t.Parallel()
+
+	c := clock.FixedClocker{}
+	wantRole := "test"
+	token, err := jwt.NewBuilder().
+		JwtID(uuid.New().String()). // これだとuuid生成失敗時にpanicするから`id, err := uuid.NewRandom()`のように生成した方が良いかも
+		Issuer(`github.com/uekiGityuto/go_todo_app`).
+		Subject("access_token").
+		IssuedAt(c.Now()).
+		Expiration(c.Now().Add(30*time.Minute)).
+		Claim(RoleKey, wantRole).
+		Claim(UserNameKey, "test_user").
+		Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pkey, err := jwk.ParseKey(rawPrivKey, jwk.WithPEM(true))
+	if err != nil {
+		t.Fatal(err)
+	}
+	signed, err := jwt.Sign(token, jwt.WithKey(jwa.RS256, pkey))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	wantID := entity.UserID(20)
+	moq := &StoreMock{}
+	moq.LoadFunc = func(ctx context.Context, key string) (entity.UserID, error) {
+		return wantID, nil
+	}
+	sut, err := NewJWTer(moq, c)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	req := httptest.NewRequest(
+		http.MethodGet,
+		`https://github.com/uekiGityuto`,
+		nil,
+	)
+	req.Header.Set(`Authorization`, fmt.Sprintf(`Bearer %s`, signed))
+	got, err := sut.FillContext(req)
+	if err != nil {
+		t.Fatalf("want no error, but got %v", err)
+	}
+
+	gotID, ok := GetUserID(got.Context())
+	if !ok || gotID != wantID {
+		t.Errorf("want userID: %v, but got %v", wantID, gotID)
+	}
+	gotRole, ok := GetRole(got.Context())
+	if !ok || gotRole != wantRole {
+		t.Errorf("want role: %v, but got %v", wantRole, gotRole)
+	}
+}
+
+func TestJWTer_DeleteUserID(t *testing.T) {
+	t.Parallel()
+
+	c := clock.FixedClocker{}
+	want, err := jwt.NewBuilder().
+		JwtID(uuid.New().String()). // これだとuuid生成失敗時にpanicするから`id, err := uuid.NewRandom()`のように生成した方が良いかも
+		Issuer(`github.com/uekiGityuto/go_todo_app`).
+		Subject("access_token").
+		IssuedAt(c.Now()).
+		Expiration(c.Now().Add(30*time.Minute)).
+		Claim(RoleKey, "test").
+		Claim(UserNameKey, "test_user").
+		Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pkey, err := jwk.ParseKey(rawPrivKey, jwk.WithPEM(true))
+	if err != nil {
+		t.Fatal(err)
+	}
+	signed, err := jwt.Sign(want, jwt.WithKey(jwa.RS256, pkey))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	userID := entity.UserID(20)
+	moq := &StoreMock{}
+	moq.LoadFunc = func(ctx context.Context, key string) (entity.UserID, error) {
+		return userID, nil
+	}
+	moq.DeleteFunc = func(ctx context.Context, key string) error {
+		return nil
+	}
+	sut, err := NewJWTer(moq, c)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	req := httptest.NewRequest(
+		http.MethodGet,
+		`https://github.com/uekiGityuto`,
+		nil,
+	)
+	req.Header.Set(`Authorization`, fmt.Sprintf(`Bearer %s`, signed))
+	err = sut.DeleteUserID(req)
+	if err != nil {
+		t.Errorf("want no error, but error: %+v", err)
 	}
 }
