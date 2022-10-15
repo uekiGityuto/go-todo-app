@@ -28,12 +28,6 @@ type JWTer struct {
 	Clocker               clock.Clocker
 }
 
-//go:generate go run github.com/matryer/moq -out moq_test.go . Store
-type Store interface {
-	Save(ctx context.Context, key string, userID entity.UserID) error
-	Load(ctx context.Context, key string) (entity.UserID, error)
-}
-
 func NewJWTer(s Store, c clock.Clocker) (*JWTer, error) {
 	j := &JWTer{Store: s}
 	privKey, err := parse(rawPrivKey)
