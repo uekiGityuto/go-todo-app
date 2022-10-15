@@ -66,7 +66,7 @@ func TestJWTer_GetToken(t *testing.T) {
 	c := clock.FixedClocker{}
 	want, err := jwt.NewBuilder().
 		JwtID(uuid.New().String()).
-		Issuer(`github.com/uekiGityuto/go_todo_app`).
+		Issuer(`github.com/uekiGityuto/go_todo_app`). // バッククォートはraw string literals
 		Subject("access_token").
 		IssuedAt(c.Now()).
 		Expiration(c.Now().Add(30*time.Minute)).

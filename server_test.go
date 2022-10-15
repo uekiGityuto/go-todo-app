@@ -34,7 +34,11 @@ func TestRun(t *testing.T) {
 	if err != nil {
 		t.Errorf("failed to get: %+v", err)
 	}
-	defer rsp.Body.Close()
+	defer func() {
+		if err := rsp.Body.Close(); err != nil {
+			t.Fatalf("failed to close response body: %+v", err)
+		}
+	}()
 
 	got, err := io.ReadAll(rsp.Body)
 	if err != nil {
