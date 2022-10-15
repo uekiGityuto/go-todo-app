@@ -39,16 +39,13 @@ jobs:
         - run: |
             go install github.com/k0kubun/sqldef/cmd/mysqldef@latest
             mysqldef -u todo -p todo -h 127.0.0.1 -P 3306 todo < ./_tools/mysql/schema.sql
-        - name: place the pem file
+        - name: Place pem files
           env:
             PUBLIC_PEM: ${{ secrets.PUBLIC_PEM }}
             SECRET_PEM: ${{ secrets.SECRET_PEM }}
           run: |
-            ls -l auth/cert
-            echo $PUBLIC_PEM | base64 --decode > auth/cert/public_test.pem
-            echo $SECRET_PEM | base64 --decode > auth/cert/secret_test.pem
-            ls -l auth/cert
-            diff auth/cert/public_test.pem auth/cert/public.pem
+            echo $PUBLIC_PEM | base64 --decode > auth/cert/public.pem
+            echo $SECRET_PEM | base64 --decode > auth/cert/secret.pem
         - run: |
             go test ./... -coverprofile=coverage.out
           env:
