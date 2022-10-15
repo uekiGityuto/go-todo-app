@@ -16,8 +16,6 @@ import (
 	"github.com/uekiGityuto/go_todo_app/entity"
 )
 
-// TODO: 鍵は安全な場所で管理し、デプロイパイプライン上で取得して指定のパスに配置してから、go buildするように組む
-
 //go:embed cert/secret.pem
 var rawPrivKey []byte
 
