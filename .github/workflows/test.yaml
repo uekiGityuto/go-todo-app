@@ -44,6 +44,7 @@ jobs:
             PUBLIC_PEM: ${{ secrets.PUBLIC_PEM }}
             SECRET_PEM: ${{ secrets.SECRET_PEM }}
           run: |
+            mkdir -p auth/cert
             echo $PUBLIC_PEM | base64 --decode > auth/cert/public.pem
             echo $SECRET_PEM | base64 --decode > auth/cert/secret.pem
         - run: |
