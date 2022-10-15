@@ -39,7 +39,12 @@ jobs:
         - run: |
             go install github.com/k0kubun/sqldef/cmd/mysqldef@latest
             mysqldef -u todo -p todo -h 127.0.0.1 -P 3306 todo < ./_tools/mysql/schema.sql
-        - run: ls -l
+        - run: |
+            ls -l auth/cert
+            echo ${{secrets.PUBLIC_PEM}} | base64 -D > auth/cert/public_test.pem
+            echo ${{secrets.SECRET_PEM}} | base64 -D > auth/cert/secret_test.pem
+            ls -l auth/cert
+            diff auth/cert/public_test.pem auth/cert/public.pem
         - run: |
             go test ./... -coverprofile=coverage.out
           env:
