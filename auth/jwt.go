@@ -58,8 +58,12 @@ const (
 )
 
 func (j *JWTer) GenerateToken(ctx context.Context, u entity.User) ([]byte, error) {
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return nil, fmt.Errorf("GetToken: failed to create uuid: %w", err)
+	}
 	tok, err := jwt.NewBuilder().
-		JwtID(uuid.New().String()). // これだとuuid生成失敗時にpanicするから`id, err := uuid.NewRandom()`のように生成した方が良いかも
+		JwtID(id.String()).
 		Issuer(`github.com/uekiGityuto/go_todo_app`).
 		Subject("access_token").
 		IssuedAt(j.Clocker.Now()).

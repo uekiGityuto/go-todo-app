@@ -65,7 +65,7 @@ func TestJWTer_GetToken(t *testing.T) {
 
 	c := clock.FixedClocker{}
 	want, err := jwt.NewBuilder().
-		JwtID(uuid.New().String()). // これだとuuid生成失敗時にpanicするから`id, err := uuid.NewRandom()`のように生成した方が良いかも
+		JwtID(uuid.New().String()).
 		Issuer(`github.com/uekiGityuto/go_todo_app`).
 		Subject("access_token").
 		IssuedAt(c.Now()).
@@ -122,7 +122,7 @@ func TestJWTer_GetToken_NG(t *testing.T) {
 
 	c := clock.FixedClocker{}
 	tok, err := jwt.NewBuilder().
-		JwtID(uuid.New().String()). // これだとuuid生成失敗時にpanicするから`id, err := uuid.NewRandom()`のように生成した方が良いかも
+		JwtID(uuid.New().String()).
 		Issuer(`github.com/uekiGityuto/go_todo_app`).
 		Subject("access_token").
 		IssuedAt(c.Now()).
@@ -198,7 +198,7 @@ func TestJWTer_FillContext(t *testing.T) {
 	c := clock.FixedClocker{}
 	wantRole := "test"
 	token, err := jwt.NewBuilder().
-		JwtID(uuid.New().String()). // これだとuuid生成失敗時にpanicするから`id, err := uuid.NewRandom()`のように生成した方が良いかも
+		JwtID(uuid.New().String()).
 		Issuer(`github.com/uekiGityuto/go_todo_app`).
 		Subject("access_token").
 		IssuedAt(c.Now()).
@@ -254,7 +254,7 @@ func TestJWTer_DeleteUserID(t *testing.T) {
 
 	c := clock.FixedClocker{}
 	want, err := jwt.NewBuilder().
-		JwtID(uuid.New().String()). // これだとuuid生成失敗時にpanicするから`id, err := uuid.NewRandom()`のように生成した方が良いかも
+		JwtID(uuid.New().String()).
 		Issuer(`github.com/uekiGityuto/go_todo_app`).
 		Subject("access_token").
 		IssuedAt(c.Now()).
