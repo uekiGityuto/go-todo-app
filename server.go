@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -20,7 +21,8 @@ type Server struct {
 func NewServer(l net.Listener, mux http.Handler) *Server {
 	return &Server{
 		srv: &http.Server{
-			Handler: mux,
+			ReadHeaderTimeout: 20 * time.Second,
+			Handler:           mux,
 		}, l: l,
 	}
 }
