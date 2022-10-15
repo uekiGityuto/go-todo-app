@@ -49,7 +49,7 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 	}
 	mux.Post("/register", ru.ServeHTTP)
 
-	l := &handler.Login{
+	lin := &handler.Login{
 		Service: &service.Login{
 			DB:             db,
 			Repo:           r,
@@ -57,7 +57,7 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 		},
 		Validator: v,
 	}
-	mux.Post("/login", l.ServeHTTP)
+	mux.Post("/login", lin.ServeHTTP)
 
 	at := &handler.AddTask{
 		Service:   &service.AddTask{DB: db, Repo: r},
@@ -78,6 +78,14 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 			w.Header().Set("Content-Type", "application/json; charset=uft-8")
 			_, _ = w.Write([]byte(`{"message": "admin only"}`))
 		})
+	})
+
+	lout := &handler.Logout{
+		Service: &service.Logout{UserIDDeleter: jwter},
+	}
+	mux.Route("/logout", func(r chi.Router) {
+		r.Use(handler.AuthMiddleware(jwter))
+		r.Get("/", lout.ServeHTTP)
 	})
 
 	return mux, cleanup, err
