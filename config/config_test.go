@@ -6,6 +6,8 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	// t.Setenvメソッドを使う時はt.Parallelメソッドを使わないこと（他のテストケースへの副作用があるから）
+
 	wantPort := 3333
 	t.Setenv("PORT", fmt.Sprint(wantPort))
 	wantDBPort := 3306

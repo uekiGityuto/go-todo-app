@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/uekiGityuto/go_todo_app/auth"
@@ -31,6 +32,21 @@ func AdminMiddleware(next http.Handler) http.Handler {
 			}, http.StatusUnauthorized)
 			return
 		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func RecoveryMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if err := recover(); err != nil {
+				RespondJSON(r.Context(), w, ErrResponse{
+					Message: "error occurred",
+					Details: []string{fmt.Sprintf("%v", err)},
+				}, http.StatusUnauthorized)
+				return
+			}
+		}()
 		next.ServeHTTP(w, r)
 	})
 }
