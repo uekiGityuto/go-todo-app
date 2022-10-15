@@ -20,6 +20,7 @@ mkdir -p auth/cert
 openssl genrsa 4096 > auth/cert/secret.pem
 openssl rsa -pubout < auth/cert/secret.pem > auth/cert/public.pem
 ```
+
 ### DB作成
 DBスキーマを作成する必要があります。
 ```bash
@@ -27,12 +28,22 @@ make up
 make migrate
 ```
 
-## ローカル環境の起動方法と動作確認
+### テスト環境構築(mock作成)
+```bash
+make generate
+```
+
+## テスト実行
+```bash
+make up
+make test
+```
+
+## ローカル環境の動作確認
+
 ```bash
 # 起動
 make up
-# テスト
-make test
 # Curlでリクエストする例
 ## ユーザ作成
 curl -i -XPOST localhost:18000/register -d '{"name": "admin_user", "password": "test", "role": "admin"}'
