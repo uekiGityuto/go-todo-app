@@ -7,9 +7,11 @@ import (
 
 func TestNew(t *testing.T) {
 	wantPort := 3333
-	wantRedisPort := 6379
-	wantDBPort := 3306
 	t.Setenv("PORT", fmt.Sprint(wantPort))
+	wantDBPort := 3306
+	t.Setenv("TODO_DB_PORT", fmt.Sprint(wantDBPort))
+	wantRedisPort := 6379
+	t.Setenv("TODO_REDIS_PORT", fmt.Sprint(wantRedisPort))
 
 	got, err := New()
 	if err != nil {
