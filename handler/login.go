@@ -48,6 +48,5 @@ func (l *Login) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}{
 		AccessToken: jwt,
 	}
-	// TODO: ctxではなく、r.Context()にする必要があるのか確認
-	RespondJSON(r.Context(), w, rsp, http.StatusOK)
+	RespondJSON(ctx, w, rsp, http.StatusOK)
 }
