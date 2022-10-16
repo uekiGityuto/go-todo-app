@@ -77,7 +77,7 @@ func TestRepository_RegisterUser(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() {
-		db.Close()
+		_ = db.Close()
 	})
 	mock.ExpectExec(`INSERT INTO user`).
 		WithArgs(okUser.Name, okUser.Password, okUser.Role, c.Now(), c.Now()).

@@ -127,7 +127,7 @@ func TestRepository_AddTask(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() {
-		db.Close()
+		_ = db.Close()
 	})
 	mock.ExpectExec(`INSERT INTO task`).
 		WithArgs(okTask.UserID, okTask.Title, okTask.Status, c.Now(), c.Now()).

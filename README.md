@@ -1,6 +1,7 @@
 # go_todo_app
 
-このリポジトリ内のコードは[詳解Go言語Webアプリケーション開発](https://www.amazon.co.jp/%E8%A9%B3%E8%A7%A3Go%E8%A8%80%E8%AA%9EWeb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E9%96%8B%E7%99%BA-%E6%B8%85%E6%B0%B4%E9%99%BD%E4%B8%80%E9%83%8E-ebook/dp/B0B62K55SL/ref=sr_1_1?adgrpid=138104784699&gclid=CjwKCAjwkaSaBhA4EiwALBgQaB2hrIsngzgcQHoEWL4dUCFG9y4KJY6V8WSwcPX7P51uQRp3KypYFhoCBu8QAvD_BwE&hvadid=626779852727&hvdev=c&hvlocphy=1009318&hvnetw=g&hvqmt=e&hvrand=18193561217761404218&hvtargid=kwd-1686770390525&hydadcr=1798_13549897&jp-ad-ap=0&keywords=%E8%A9%B3%E8%A7%A3go%E8%A8%80%E8%AA%9Eweb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E9%96%8B%E7%99%BA&qid=1665813548&qu=eyJxc2MiOiIwLjgyIiwicXNhIjoiMC44NCIsInFzcCI6IjAuMzcifQ%3D%3D&sr=8-1)に記載のコードを勉強用に模写しながら、カスタマイズしたもの。
+このリポジトリは[詳解Go言語Webアプリケーション開発](https://www.amazon.co.jp/%E8%A9%B3%E8%A7%A3Go%E8%A8%80%E8%AA%9EWeb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E9%96%8B%E7%99%BA-%E6%B8%85%E6%B0%B4%E9%99%BD%E4%B8%80%E9%83%8E-ebook/dp/B0B62K55SL/ref=sr_1_1?adgrpid=138104784699&gclid=CjwKCAjwkaSaBhA4EiwALBgQaB2hrIsngzgcQHoEWL4dUCFG9y4KJY6V8WSwcPX7P51uQRp3KypYFhoCBu8QAvD_BwE&hvadid=626779852727&hvdev=c&hvlocphy=1009318&hvnetw=g&hvqmt=e&hvrand=18193561217761404218&hvtargid=kwd-1686770390525&hydadcr=1798_13549897&jp-ad-ap=0&keywords=%E8%A9%B3%E8%A7%A3go%E8%A8%80%E8%AA%9Eweb%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E9%96%8B%E7%99%BA&qid=1665813548&qu=eyJxc2MiOiIwLjgyIiwicXNhIjoiMC44NCIsInFzcCI6IjAuMzcifQ%3D%3D&sr=8-1)に記載のコードを勉強用に模写しながら、カスタマイズしたもの。  
+また、書籍のコードの最新版は[こちら](https://github.com/budougumi0617/go_todo_app)にあるので、それも参考にすること。
 
 ## ローカル環境構築
 
@@ -55,4 +56,6 @@ export TODO_TOKEN=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjU0MjY4NzQsI
 curl -XPOST -H "Authorization: Bearer $TODO_TOKEN" localhost:18000/tasks -d @./handler/testdata/add_task/ok_req.json.golden
 ## タスク一覧取得
 curl -XGET -H "Authorization: Bearer $TODO_TOKEN" localhost:18000/tasks
+## ログアウト
+curl -XGET -H "Authorization: Bearer $TODO_TOKEN" localhost:18000/logout
 ```

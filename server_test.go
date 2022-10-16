@@ -19,7 +19,10 @@ func TestRun(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	eg, ctx := errgroup.WithContext(ctx)
 	mux := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+		_, err := fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+		if err != nil {
+			t.Fatalf("failed to write to response body")
+		}
 	})
 
 	eg.Go(func() error {
