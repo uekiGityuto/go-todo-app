@@ -26,6 +26,9 @@ func run(ctx context.Context) error {
 	if err != nil {
 		log.Fatalf("failed to listen port %d: %v", cfg.Port, err)
 	}
+
+	// TODO: ここはなくても良い。もしロギングするならlogパッケージは標準エラー出力に書き出すので使わない方が良い。
+	// 参考: https://github.com/budougumi0617/go_todo_app/discussions/69
 	url := fmt.Sprintf("http://%s", l.Addr().String())
 	log.Printf("start with: %v", url)
 
