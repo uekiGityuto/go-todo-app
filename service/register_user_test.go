@@ -7,11 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
-
 	"github.com/google/go-cmp/cmp"
 	"github.com/uekiGityuto/go_todo_app/entity"
 	"github.com/uekiGityuto/go_todo_app/store"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func TestRegisterUser(t *testing.T) {

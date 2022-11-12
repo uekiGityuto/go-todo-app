@@ -5,9 +5,10 @@ package handler
 
 import (
 	"context"
-	"github.com/uekiGityuto/go_todo_app/entity"
 	"net/http"
 	"sync"
+
+	"github.com/uekiGityuto/go_todo_app/entity"
 )
 
 // Ensure, that ListTaskServiceMock does implement ListTaskService.

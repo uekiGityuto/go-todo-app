@@ -5,10 +5,11 @@ package service
 
 import (
 	"context"
-	"github.com/uekiGityuto/go_todo_app/entity"
-	"github.com/uekiGityuto/go_todo_app/store"
 	"net/http"
 	"sync"
+
+	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go_todo_app/store"
 )
 
 // Ensure, that TaskAdderMock does implement TaskAdder.

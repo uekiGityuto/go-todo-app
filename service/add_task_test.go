@@ -7,13 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/uekiGityuto/go_todo_app/auth"
-
-	"github.com/uekiGityuto/go_todo_app/store"
-
 	"github.com/google/go-cmp/cmp"
-
+	"github.com/uekiGityuto/go_todo_app/auth"
 	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go_todo_app/store"
 )
 
 func TestAddTask(t *testing.T) {

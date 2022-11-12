@@ -4,10 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"golang.org/x/crypto/bcrypt"
-
 	"github.com/uekiGityuto/go_todo_app/entity"
 	"github.com/uekiGityuto/go_todo_app/store"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type RegisterUser struct {

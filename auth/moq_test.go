@@ -5,8 +5,9 @@ package auth
 
 import (
 	"context"
-	"github.com/uekiGityuto/go_todo_app/entity"
 	"sync"
+
+	"github.com/uekiGityuto/go_todo_app/entity"
 )
 
 // Ensure, that StoreMock does implement Store.

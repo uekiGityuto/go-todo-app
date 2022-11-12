@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/uekiGityuto/go_todo_app/auth"
-
 	"github.com/uekiGityuto/go_todo_app/entity"
 	"github.com/uekiGityuto/go_todo_app/store"
 )
