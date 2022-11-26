@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 func (r *Repository) RegisterUser(ctx context.Context, db Execer, u *entity.User) error {

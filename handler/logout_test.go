@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/uekiGityuto/go_todo_app/testutil"
+	"github.com/uekiGityuto/go-todo-app/testutil"
 )
 
 func TestLogout_ServeHTTP(t *testing.T) {

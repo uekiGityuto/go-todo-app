@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 type RegisterUser struct {

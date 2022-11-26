@@ -5,16 +5,16 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/uekiGityuto/go_todo_app/testutil/fixture"
+	"github.com/uekiGityuto/go-todo-app/testutil/fixture"
 
-	"github.com/uekiGityuto/go_todo_app/testutil"
+	"github.com/uekiGityuto/go-todo-app/testutil"
 
 	"github.com/google/go-cmp/cmp"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jmoiron/sqlx"
-	"github.com/uekiGityuto/go_todo_app/clock"
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/clock"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 func prepareUser(ctx context.Context, t *testing.T, con Execer) entity.UserID {

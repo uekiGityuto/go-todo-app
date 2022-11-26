@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/uekiGityuto/go_todo_app/config"
+	"github.com/uekiGityuto/go-todo-app/config"
 )
 
 func main() {

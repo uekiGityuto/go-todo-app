@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
-	"github.com/uekiGityuto/go_todo_app/store"
+	"github.com/uekiGityuto/go-todo-app/entity"
+	"github.com/uekiGityuto/go-todo-app/store"
 )
 
 //go:generate go run github.com/matryer/moq -out moq_test.go . TaskAdder TaskLister UserRegister UserGetter TokenGenerator UserIDDeleter

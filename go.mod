@@ -1,4 +1,4 @@
-module github.com/uekiGityuto/go_todo_app
+module github.com/uekiGityuto/go-todo-app
 
 go 1.19
 

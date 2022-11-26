@@ -10,18 +10,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/uekiGityuto/go_todo_app/store"
+	"github.com/uekiGityuto/go-todo-app/store"
 
 	"github.com/google/uuid"
 	"github.com/lestrrat-go/jwx/v2/jwa"
 	"github.com/lestrrat-go/jwx/v2/jwk"
 	"github.com/lestrrat-go/jwx/v2/jwt"
 
-	"github.com/uekiGityuto/go_todo_app/clock"
+	"github.com/uekiGityuto/go-todo-app/clock"
 
-	"github.com/uekiGityuto/go_todo_app/testutil/fixture"
+	"github.com/uekiGityuto/go-todo-app/testutil/fixture"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 func TestEmbed(t *testing.T) {

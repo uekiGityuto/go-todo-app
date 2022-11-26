@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/uekiGityuto/go_todo_app/auth"
+	"github.com/uekiGityuto/go-todo-app/auth"
 )
 
 func AuthMiddleware(j *auth.JWTer) func(next http.Handler) http.Handler {

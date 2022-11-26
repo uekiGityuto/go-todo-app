@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
-	"github.com/uekiGityuto/go_todo_app/testutil"
+	"github.com/uekiGityuto/go-todo-app/entity"
+	"github.com/uekiGityuto/go-todo-app/testutil"
 )
 
 func TestListTask(t *testing.T) {

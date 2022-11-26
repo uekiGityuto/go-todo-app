@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/uekiGityuto/go_todo_app/testutil"
+	"github.com/uekiGityuto/go-todo-app/testutil"
 
-	"github.com/uekiGityuto/go_todo_app/config"
+	"github.com/uekiGityuto/go-todo-app/config"
 )
 
 func TestNew(t *testing.T) {

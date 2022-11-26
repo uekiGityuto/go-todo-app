@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/entity"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/uekiGityuto/go_todo_app/config"
+	"github.com/uekiGityuto/go-todo-app/config"
 )
 
 func NewKVS(ctx context.Context, cfg *config.Config) (*KVS, error) {

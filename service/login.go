@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/uekiGityuto/go_todo_app/store"
+	"github.com/uekiGityuto/go-todo-app/store"
 )
 
 type Login struct {

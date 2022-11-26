@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 func User(u *entity.User) *entity.User {

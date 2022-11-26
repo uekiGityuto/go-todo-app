@@ -7,7 +7,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 // Ensure, that StoreMock does implement Store.

@@ -4,16 +4,16 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/uekiGityuto/go_todo_app/auth"
+	"github.com/uekiGityuto/go-todo-app/auth"
 
-	"github.com/uekiGityuto/go_todo_app/service"
+	"github.com/uekiGityuto/go-todo-app/service"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
-	"github.com/uekiGityuto/go_todo_app/clock"
-	"github.com/uekiGityuto/go_todo_app/config"
-	"github.com/uekiGityuto/go_todo_app/handler"
-	"github.com/uekiGityuto/go_todo_app/store"
+	"github.com/uekiGityuto/go-todo-app/clock"
+	"github.com/uekiGityuto/go-todo-app/config"
+	"github.com/uekiGityuto/go-todo-app/handler"
+	"github.com/uekiGityuto/go-todo-app/store"
 )
 
 func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), error) {

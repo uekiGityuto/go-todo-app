@@ -9,8 +9,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"github.com/uekiGityuto/go_todo_app/clock"
-	"github.com/uekiGityuto/go_todo_app/config"
+	"github.com/uekiGityuto/go-todo-app/clock"
+	"github.com/uekiGityuto/go-todo-app/config"
 )
 
 const (

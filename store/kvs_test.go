@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
-	"github.com/uekiGityuto/go_todo_app/testutil"
+	"github.com/uekiGityuto/go-todo-app/entity"
+	"github.com/uekiGityuto/go-todo-app/testutil"
 )
 
 func TestKVS_Save(t *testing.T) {

@@ -12,8 +12,8 @@ import (
 	"github.com/lestrrat-go/jwx/v2/jwt"
 
 	"github.com/lestrrat-go/jwx/v2/jwk"
-	"github.com/uekiGityuto/go_todo_app/clock"
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/clock"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 //go:embed cert/secret.pem

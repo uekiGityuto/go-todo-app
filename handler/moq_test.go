@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/uekiGityuto/go_todo_app/entity"
+	"github.com/uekiGityuto/go-todo-app/entity"
 )
 
 // Ensure, that ListTaskServiceMock does implement ListTaskService.

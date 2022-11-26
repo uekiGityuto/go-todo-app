@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/uekiGityuto/go_todo_app/config"
+	"github.com/uekiGityuto/go-todo-app/config"
 )
 
 func NewConfig(t *testing.T) *config.Config {
